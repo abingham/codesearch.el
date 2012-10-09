@@ -1,5 +1,5 @@
 (defcustom codesearch-csearch "csearch"
-  "TODO"
+  "The name of the csearch program."
   :type '(string)
   :group 'codesearch)
 
@@ -9,9 +9,11 @@
   (interactive
    (list
     (read-string "Pattern: ")))
-  (shell-command
-   (format "%s -n %s" codesearch-csearch pattern)
-   "*codesearch*")
-  (save-current-buffer
-    (set-buffer "*codesearch*")
-    (grep-mode)))
+  (let ((process-environment (copy-alist process-environment))
+        (switch-to-visible-buffer t))
+    (pop-to-buffer "*codesearch*")
+    (grep-mode)
+    (setenv "CSEARCHINDEX" "/Users/abingham/projects/ackward/CSEARCH")
+    (shell-command
+     (format "%s -n %s" codesearch-csearch pattern)
+     "*codesearch*")))
