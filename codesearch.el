@@ -3,7 +3,8 @@
   :type '(string)
   :group 'codesearch)
 
-;; TODO: Add support for customizing the CSEARCHINDEX env variable
+(defcustom codesearch-csearchindex nil
+  "CSEARCHINDEX environment variable value used when calling csearch.")
 
 (defun codesearch-search (pattern)
   (interactive
@@ -13,7 +14,7 @@
         (switch-to-visible-buffer t))
     (pop-to-buffer "*codesearch*")
     (grep-mode)
-    (setenv "CSEARCHINDEX" "/Users/abingham/projects/ackward/CSEARCH")
+    (setenv "CSEARCHINDEX" codesearch-csearchindex)
     (shell-command
      (format "%s -n %s" codesearch-csearch pattern)
      "*codesearch*")))
