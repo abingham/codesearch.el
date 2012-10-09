@@ -77,3 +77,6 @@
     (shell-command
      (format "%s -n %s" codesearch-csearch pattern)
      "*codesearch*")))
+
+;;;###autoload(require 'codesearch)
+(provide 'codesearch)
