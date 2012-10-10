@@ -71,12 +71,12 @@
     (read-string "Pattern: ")))
   (let ((process-environment (copy-alist process-environment))
         (switch-to-visible-buffer t))
-    (pop-to-buffer "*codesearch*")
-    (grep-mode)
     (setenv "CSEARCHINDEX" codesearch-csearchindex)
     (shell-command
      (format "%s -n %s" codesearch-csearch pattern)
-     "*codesearch*")))
+     "*codesearch*"))
+    (pop-to-buffer "*codesearch*")
+    (grep-mode))
 
 ;;;###autoload(require 'codesearch)
 (provide 'codesearch)
