@@ -62,8 +62,15 @@
   :type '(string)
   :group 'codesearch)
 
+(defcustom codesearch-cindex "cindex"
+  "The name of the cindex program."
+  :type '(string)
+  :group 'codesearch)
+
 (defcustom codesearch-csearchindex nil
-  "CSEARCHINDEX environment variable value used when calling csearch.")
+  "CSEARCHINDEX environment variable value used when calling csearch."
+  :type '(string)
+  :group 'codesearch)
 
 (defun codesearch-search (pattern)
   (interactive
@@ -77,6 +84,16 @@
      "*codesearch*"))
     (pop-to-buffer "*codesearch*")
     (compilation-mode))
+
+(defun codesearch-build-index (dir)
+  (interactive
+   (list
+    (read-directory-name "Directory: ")))
+  (let ((process-environment (copy-alist process-environment)))
+    (setenv "CSEARCHINDEX" codesearch-csearchindex)
+    (shell-command
+     (format "%s %s &" codesearch-cindex dir)
+     "*codesearch*")))
 
 ;;;###autoload(require 'codesearch)
 (provide 'codesearch)
