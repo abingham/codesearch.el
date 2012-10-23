@@ -76,7 +76,7 @@
      (format "%s -n %s" codesearch-csearch pattern)
      "*codesearch*"))
     (pop-to-buffer "*codesearch*")
-    (grep-mode))
+    (compilation-mode))
 
 ;;;###autoload(require 'codesearch)
 (provide 'codesearch)
