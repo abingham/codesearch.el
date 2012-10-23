@@ -86,6 +86,7 @@
     (compilation-mode))
 
 (defun codesearch-build-index (dir)
+  "Scan DIR to rebuild an index."
   (interactive
    (list
     (read-directory-name "Directory: ")))
@@ -93,6 +94,15 @@
     (setenv "CSEARCHINDEX" codesearch-csearchindex)
     (shell-command
      (format "%s %s &" codesearch-cindex dir)
+     "*codesearch*")))
+
+(defun codesearch-update-index ()
+  "Update an existing index."
+  (interactive)
+  (let ((process-environment (copy-alist process-environment)))
+    (setenv "CSEARCHINDEX" codesearch-csearchindex)
+    (shell-command
+     (format "%s &" codesearch-cindex)
      "*codesearch*")))
 
 ;;;###autoload(require 'codesearch)
