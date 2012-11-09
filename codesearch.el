@@ -85,6 +85,10 @@
     (pop-to-buffer "*codesearch*")
     (compilation-mode))
 
+(defun codesearch-search-at-point ()
+  (interactive)
+  (codesearch-search (thing-at-point 'word)))
+
 (defun codesearch-build-index (dir)
   "Scan DIR to rebuild an index."
   (interactive
