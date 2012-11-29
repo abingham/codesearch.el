@@ -97,6 +97,7 @@
   (let ((process-environment (copy-alist process-environment)))
     (setenv "CSEARCHINDEX" codesearch-csearchindex)
     (shell-command
+     (message "%s %s" codesearch-cindex dir)
      (format "%s %s &" codesearch-cindex dir)
      "*codesearch*")))
 
@@ -106,6 +107,7 @@
   (let ((process-environment (copy-alist process-environment)))
     (setenv "CSEARCHINDEX" codesearch-csearchindex)
     (shell-command
+     (message "%s" codesearch-cindex)
      (format "%s &" codesearch-cindex)
      "*codesearch*")))
 
