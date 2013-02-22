@@ -7,10 +7,10 @@ This extension allows you to use the codesearch code indexing
 system in emacs.
 
 For more details, see the project page at
-https://github.com/abingham/prosjekt.
+https://github.com/abingham/codesearch.el.
 
 For more details on codesearch, see its project page at
-http://code.google.com/p/codesearch/
+http://code.google.com/p/codesearch/.
 
 Installation:
 
