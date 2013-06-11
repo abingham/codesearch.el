@@ -87,7 +87,7 @@
 
 (defun codesearch-search-at-point ()
   (interactive)
-  (codesearch-search (thing-at-point 'word)))
+  (codesearch-search (thing-at-point 'symbol)))
 
 (defun codesearch-build-index (dir)
   "Scan DIR to rebuild an index."
