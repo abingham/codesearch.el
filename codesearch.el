@@ -72,18 +72,21 @@
   :type '(string)
   :group 'codesearch)
 
-(defun codesearch-search (pattern)
+(defun codesearch-search (pattern file-pattern)
   (interactive
    (list
-    (read-string "Pattern: ")))
+    (read-string "Pattern: ")
+    (read-string "File pattern: " ".*")))
   (let ((process-environment (copy-alist process-environment))
-        (switch-to-visible-buffer t))
+        (switch-to-visible-buffer t)
+        (buff (get-buffer-create "*codesearch-results*")))
     (setenv "CSEARCHINDEX" codesearch-csearchindex)
-    (shell-command
-     (format "%s -n %s" codesearch-csearch pattern)
-     "*codesearch*"))
-    (pop-to-buffer "*codesearch*")
-    (compilation-mode))
+    (with-current-buffer buff
+      (read-only-mode 0)
+      (erase-buffer)
+      (call-process codesearch-csearch nil 't nil "-f" file-pattern "-n" pattern))
+    (pop-to-buffer buff)
+    (compilation-mode)))
 
 (defun codesearch-search-at-point ()
   (interactive)
@@ -96,20 +99,14 @@
     (read-directory-name "Directory: ")))
   (let ((process-environment (copy-alist process-environment)))
     (setenv "CSEARCHINDEX" codesearch-csearchindex)
-    (shell-command
-     (message "%s %s" codesearch-cindex dir)
-     (format "%s %s &" codesearch-cindex dir)
-     "*codesearch*")))
+    (start-process "cindex" "*codesearch-index*" codesearch-cindex dir)))
 
 (defun codesearch-update-index ()
   "Update an existing index."
   (interactive)
   (let ((process-environment (copy-alist process-environment)))
     (setenv "CSEARCHINDEX" codesearch-csearchindex)
-    (shell-command
-     (message "%s" codesearch-cindex)
-     (format "%s &" codesearch-cindex)
-     "*codesearch*")))
+    (start-process "cindex" "*codesearch-index*" codesearch-cindex)))
 
 ;;;###autoload(require 'codesearch)
 (provide 'codesearch)
