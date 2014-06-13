@@ -75,7 +75,7 @@
 (defun codesearch-search (pattern file-pattern)
   (interactive
    (list
-    (read-string "Pattern: ")
+    (read-string "Pattern: " (thing-at-point 'symbol))
     (read-string "File pattern: " ".*")))
   (let ((process-environment (copy-alist process-environment))
         (switch-to-visible-buffer t)
@@ -87,10 +87,6 @@
       (call-process codesearch-csearch nil 't nil "-f" file-pattern "-n" pattern))
     (pop-to-buffer buff)
     (compilation-mode)))
-
-(defun codesearch-search-at-point ()
-  (interactive)
-  (codesearch-search (thing-at-point 'symbol)))
 
 (defun codesearch-build-index (dir)
   "Scan DIR to rebuild an index."
