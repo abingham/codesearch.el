@@ -1,5 +1,4 @@
-;;; codesearch.el --- An emacs extension for using the codesearch
-;;; sourcecode indexer.
+;;; codesearch.el --- Easy access to the codesearch tools
 ;;
 ;; Author: Austin Bingham <austin.bingham@gmail.com>
 ;; Version: 1
@@ -89,7 +88,7 @@
     (with-current-buffer buff
       (read-only-mode 0)
       (erase-buffer)
-      (call-process codesearch-csearch nil 't nil "-f" file-pattern "-n" pattern))
+      (call-process codesearch-csearch nil t nil "-f" file-pattern "-n" pattern))
     (pop-to-buffer buff)
     (compilation-mode)))
 
