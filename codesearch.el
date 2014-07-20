@@ -7,7 +7,7 @@
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
-;; Copyright (c) 2012 Austin Bingham
+;; Copyright (c) 2012-2014 Austin Bingham
 ;;
 ;;; Commentary:
 ;;
@@ -17,7 +17,7 @@
 ;; system in emacs.
 ;;
 ;; For more details, see the project page at
-;; https://github.com/abingham/prosjekt.
+;; https://github.com/abingham/codesearch.el.
 ;;
 ;; For more details on codesearch, see its project page at
 ;; http://code.google.com/p/codesearch/
@@ -31,6 +31,10 @@
 ;; Example config:
 ;;
 ;;   (require 'codesearch)
+;;
+;; This elisp extension assumes you've got the codesearch tools -
+;; csearch and cindex - installed. See the codesearch-csearch and
+;; codesearch-cindex variables for more information.
 ;;
 ;;; License:
 ;;
@@ -72,6 +76,7 @@
   :type '(string)
   :group 'codesearch)
 
+;;;###autoload
 (defun codesearch-search (pattern file-pattern)
   (interactive
    (list
@@ -88,6 +93,7 @@
     (pop-to-buffer buff)
     (compilation-mode)))
 
+;;;###autoload
 (defun codesearch-build-index (dir)
   "Scan DIR to rebuild an index."
   (interactive
@@ -97,6 +103,7 @@
     (setenv "CSEARCHINDEX" codesearch-csearchindex)
     (start-process "cindex" "*codesearch-index*" codesearch-cindex dir)))
 
+;;;###autoload
 (defun codesearch-update-index ()
   "Update an existing index."
   (interactive)
@@ -104,5 +111,6 @@
     (setenv "CSEARCHINDEX" codesearch-csearchindex)
     (start-process "cindex" "*codesearch-index*" codesearch-cindex)))
 
-;;;###autoload(require 'codesearch)
 (provide 'codesearch)
+
+;;; codesearch.el ends here
