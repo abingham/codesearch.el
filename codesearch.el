@@ -60,6 +60,10 @@
 
 ;;; Code:
 
+(defgroup codesearch nil
+  "Variables related to codesearch."
+  :prefix "codesearch-"
+  :group 'tools)
 
 (defcustom codesearch-csearch "csearch"
   "The name of the csearch program."
