@@ -89,7 +89,7 @@
   (let ((process-environment (copy-alist process-environment))
         (switch-to-visible-buffer t)
         (buff (get-buffer-create "*codesearch-results*")))
-    (setenv "CSEARCHINDEX" codesearch-csearchindex)
+    (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
     (with-current-buffer buff
       (read-only-mode 0)
       (erase-buffer)
@@ -104,8 +104,8 @@
    (list
     (read-directory-name "Directory: ")))
   (let ((process-environment (copy-alist process-environment)))
-    (setenv "CSEARCHINDEX" codesearch-csearchindex)
-    (start-process "cindex" "*codesearch-index*" codesearch-cindex dir)))
+    (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
+    (start-process "cindex" "*codesearch-index*" codesearch-cindex (expand-file-name dir))))
 
 ;;;###autoload
 (defun codesearch-update-index ()
