@@ -75,7 +75,7 @@
   :type '(string)
   :group 'codesearch)
 
-(defcustom codesearch-csearchindex nil
+(defcustom codesearch-csearchindex "~/.csearchindex"
   "CSEARCHINDEX environment variable value used when calling csearch."
   :type '(string)
   :group 'codesearch)
