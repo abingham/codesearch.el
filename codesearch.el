@@ -93,7 +93,7 @@
     (with-current-buffer buff
       (read-only-mode 0)
       (erase-buffer)
-      (call-process codesearch-csearch nil t nil "-f" file-pattern "-n" pattern))
+      (start-file-process "csearch" buff codesearch-csearch "-f" file-pattern "-n" pattern))
     (pop-to-buffer buff)
     (compilation-mode)))
 
@@ -105,7 +105,7 @@
     (read-directory-name "Directory: ")))
   (let ((process-environment (copy-alist process-environment)))
     (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
-    (start-process "cindex" "*codesearch-index*" codesearch-cindex (expand-file-name dir))))
+    (start-file-process "cindex" (get-buffer-create "*codesearch-index*") codesearch-cindex (expand-file-name dir))))
 
 ;;;###autoload
 (defun codesearch-update-index ()
@@ -113,7 +113,7 @@
   (interactive)
   (let ((process-environment (copy-alist process-environment)))
     (setenv "CSEARCHINDEX" codesearch-csearchindex)
-    (start-process "cindex" "*codesearch-index*" codesearch-cindex)))
+    (start-file-process "cindex" (get-buffer-create "*codesearch-index*") codesearch-cindex)))
 
 (provide 'codesearch)
 
