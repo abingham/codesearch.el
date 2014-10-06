@@ -84,11 +84,12 @@
   :group 'codesearch)
 
 (defun codesearch-get-indexed-directories ()
-  (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
-  (with-temp-buffer
-    (let ((result (process-file codesearch-cindex nil (current-buffer) nil "-list")))
-      (when (= result 0)
-        (-slice (split-string (buffer-string) "\n") 0 -1)))))
+  (let ((process-environment (copy-alist process-environment)))
+    (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
+    (with-temp-buffer
+      (let ((result (process-file codesearch-cindex nil (current-buffer) nil "-list")))
+        (when (= result 0)
+          (-slice (split-string (buffer-string) "\n") 0 -1))))))
 
 ;;;###autoload
 (defun codesearch-search (pattern file-pattern)
