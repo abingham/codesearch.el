@@ -112,8 +112,19 @@
   "Update an existing index."
   (interactive)
   (let ((process-environment (copy-alist process-environment)))
-    (setenv "CSEARCHINDEX" codesearch-csearchindex)
+    (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
     (start-file-process "cindex" (get-buffer-create "*codesearch-index*") codesearch-cindex)))
+
+;;;###autoload
+(defun codesearch-clear-index ()
+  "Clear/delete the codesearch index."
+  (interactive)
+  (let ((process-environment (copy-alist process-environment)))
+    (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
+    (start-file-process "cindex"
+                        (get-buffer-create "*codesearch-index*")
+                        codesearch-cindex
+                        "-reset")))
 
 (provide 'codesearch)
 
