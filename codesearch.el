@@ -4,6 +4,7 @@
 ;; Version: 1
 ;; URL: https://github.com/abingham/codesearch.el
 ;; Keywords: tools, development, search
+;; Package-Requires: ((dash "2.8.0"))
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -64,6 +65,8 @@
 
 ;;; Code:
 
+(require 'dash)
+
 (defgroup codesearch nil
   "Variables related to codesearch."
   :prefix "codesearch-"
@@ -101,6 +104,14 @@ followed by ARGS as arguments."
            codesearch-cindex
            full-args)))
 
+(defun codesearch-get-indexed-directories ()
+  (let ((process-environment (copy-alist process-environment)))
+    (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
+    (with-temp-buffer
+      (let ((result (process-file codesearch-cindex nil (current-buffer) nil "-list")))
+        (when (= result 0)
+          (-slice (split-string (buffer-string) "\n") 0 -1))))))
+
 ;;;###autoload
 (defun codesearch-search (pattern file-pattern)
   (interactive
@@ -137,6 +148,20 @@ followed by ARGS as arguments."
   "Clear/delete the codesearch index."
   (interactive)
   (codesearch--run-cindex "-reset"))
+
+;;;###autoload
+(defun codesearch-list-directories ()
+  "List the directories currently being indexed"
+  (interactive)
+  (let ((dirs (codesearch-get-indexed-directories))
+        (buff (get-buffer-create "*codesearch-directories*")))
+    (with-current-buffer buff
+      (erase-buffer)
+      (insert "[codesearch: currently indexed directories]\n\n")
+      (mapcar
+       (lambda (dir) (insert (format "%s\n" dir)))
+       dirs))
+    (display-buffer buff)))
 
 (provide 'codesearch)
 
