@@ -147,8 +147,8 @@ the index with the new contents."
   (codesearch--run-cindex))
 
 ;;;###autoload
-(defun codesearch-clear-index ()
-  "Clear/delete the codesearch index."
+(defun codesearch-reset ()
+  "Reset (delete) the codesearch index."
   (interactive)
   (codesearch--run-cindex "-reset"))
 
