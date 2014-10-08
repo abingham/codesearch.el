@@ -84,6 +84,23 @@
   :type '(string)
   :group 'codesearch)
 
+(defcustom codesearch-cindex-flags '()
+  "Extra flags to pass to cindex."
+  :type '(repeat string)
+  :group 'codesearch)
+
+(defun codesearch--run-cindex (&rest args)
+  "Run the cindex command, passing `codesearch-cindex-flags`
+followed by ARGS as arguments."
+  (let ((process-environment (copy-alist process-environment))
+        (full-args (append codesearch-cindex-flags args)))
+    (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
+    (apply 'start-file-process
+           "cindex"
+           (get-buffer-create "*codesearch-index*")
+           codesearch-cindex
+           full-args)))
+
 ;;;###autoload
 (defun codesearch-search (pattern file-pattern)
   (interactive
@@ -107,28 +124,19 @@
   (interactive
    (list
     (read-directory-name "Directory: ")))
-  (let ((process-environment (copy-alist process-environment)))
-    (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
-    (start-file-process "cindex" (get-buffer-create "*codesearch-index*") codesearch-cindex (expand-file-name dir))))
+  (codesearch--run-cindex (expand-file-name dir)))
 
 ;;;###autoload
 (defun codesearch-update-index ()
   "Update an existing index."
   (interactive)
-  (let ((process-environment (copy-alist process-environment)))
-    (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
-    (start-file-process "cindex" (get-buffer-create "*codesearch-index*") codesearch-cindex)))
+  (codesearch--run-cindex))
 
 ;;;###autoload
 (defun codesearch-clear-index ()
   "Clear/delete the codesearch index."
   (interactive)
-  (let ((process-environment (copy-alist process-environment)))
-    (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
-    (start-file-process "cindex"
-                        (get-buffer-create "*codesearch-index*")
-                        codesearch-cindex
-                        "-reset")))
+  (codesearch--run-cindex "-reset"))
 
 (provide 'codesearch)
 
