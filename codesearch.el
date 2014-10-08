@@ -132,17 +132,12 @@ followed by ARGS as arguments."
     (compilation-mode)))
 
 ;;;###autoload
-(defun codesearch-build-index (dir &optional reset)
-  "Add the contents of DIR to the index.
-
-If RESET is true, the index contents for DIR (if any) are cleared
-out first."
+(defun codesearch-build-index (dir)
+  "Add the contents of DIR to the index."
   (interactive
    (list
-    (read-directory-name "Directory: ")
-    (y-or-n-p "Reset? ")))
-  (let ((args (if reset `("-reset" ,dir) `(,dir))))
-    (apply 'codesearch--run-cindex args)))
+    (read-directory-name "Directory: ")))
+  (codesearch--run-cindex dir))
 
 ;;;###autoload
 (defun codesearch-update-index ()
