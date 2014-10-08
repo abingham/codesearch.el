@@ -105,6 +105,7 @@ followed by ARGS as arguments."
            full-args)))
 
 (defun codesearch-get-indexed-directories ()
+  "Get the list of directories currently being indexed."
   (let ((process-environment (copy-alist process-environment)))
     (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
     (with-temp-buffer
@@ -114,6 +115,7 @@ followed by ARGS as arguments."
 
 ;;;###autoload
 (defun codesearch-search (pattern file-pattern)
+  "Search files matching FILE-PATTERN in the index for PATTERN."
   (interactive
    (list
     (read-string "Pattern: " (thing-at-point 'symbol))
@@ -130,16 +132,22 @@ followed by ARGS as arguments."
     (compilation-mode)))
 
 ;;;###autoload
-(defun codesearch-build-index (dir)
-  "Scan DIR to rebuild an index."
+(defun codesearch-build-index (dir &optional reset)
+  "Add the contents of DIR to the index.
+
+If RESET is true, the index contents for DIR (if any) are cleared
+out first."
   (interactive
    (list
-    (read-directory-name "Directory: ")))
-  (codesearch--run-cindex (expand-file-name dir)))
+    (read-directory-name "Directory: ")
+    (y-or-n-p "Reset? ")))
+  (let ((args (if reset `("-reset" ,dir) `(,dir))))
+    (apply 'codesearch--run-cindex args)))
 
 ;;;###autoload
 (defun codesearch-update-index ()
-  "Update an existing index."
+  "Rescan all of the directories currently in the index, updating
+the index with the new contents."
   (interactive)
   (codesearch--run-cindex))
 
@@ -151,7 +159,7 @@ followed by ARGS as arguments."
 
 ;;;###autoload
 (defun codesearch-list-directories ()
-  "List the directories currently being indexed"
+  "List the directories currently being indexed."
   (interactive)
   (let ((dirs (codesearch-get-indexed-directories))
         (buff (get-buffer-create "*codesearch-directories*")))
