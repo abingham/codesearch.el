@@ -2,7 +2,7 @@
 ;;
 ;; Author: Austin Bingham <austin.bingham@gmail.com>
 ;; Version: 1
-;; URL: https://github.com/abingham/codespeak.el
+;; URL: https://github.com/abingham/codesearch.el
 ;; Keywords: tools, development, search
 ;; Package-Requires: ((dash "2.8.0"))
 ;;
@@ -25,9 +25,13 @@
 ;;
 ;; Installation:
 ;;
-;; Copy codesearch.el to some location in your emacs load path. Then add
-;; "(require 'codesearch)" to your emacs initialization (.emacs,
-;; init.el, or something).
+;; The simple way is to use package.el:
+;;
+;;   M-x package-install codesearch
+;;
+;; Or, copy codesearch.el to some location in your emacs load
+;; path. Then add "(require 'codesearch)" to your emacs initialization
+;; (.emacs, init.el, or something).
 ;;
 ;; Example config:
 ;;
@@ -83,6 +87,23 @@
   :type '(string)
   :group 'codesearch)
 
+(defcustom codesearch-cindex-flags '()
+  "Extra flags to pass to cindex."
+  :type '(repeat string)
+  :group 'codesearch)
+
+(defun codesearch--run-cindex (&rest args)
+  "Run the cindex command, passing `codesearch-cindex-flags`
+followed by ARGS as arguments."
+  (let ((process-environment (copy-alist process-environment))
+        (full-args (append codesearch-cindex-flags args)))
+    (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
+    (apply 'start-file-process
+           "cindex"
+           (get-buffer-create "*codesearch-index*")
+           codesearch-cindex
+           full-args)))
+
 (defun codesearch-get-indexed-directories ()
   "Get the list of directories currently being indexed."
   (let ((process-environment (copy-alist process-environment)))
@@ -120,24 +141,21 @@ out first."
    (list
     (read-directory-name "Directory: ")
     (y-or-n-p "Reset? ")))
-  (let ((process-environment (copy-alist process-environment))
-        (args (if reset '("-reset"))))
-    (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
-    (apply 'start-file-process
-           "cindex"
-           (get-buffer-create "*codesearch-index*")
-           codesearch-cindex
-           (expand-file-name dir)
-           args)))
+  (let ((args (if reset `("-reset" ,dir) `(,dir))))
+    (apply 'codesearch--run-cindex args)))
 
 ;;;###autoload
 (defun codesearch-update-index ()
   "Rescan all of the directories currently in the index, updating
 the index with the new contents."
   (interactive)
-  (let ((process-environment (copy-alist process-environment)))
-    (setenv "CSEARCHINDEX" codesearch-csearchindex)
-    (start-file-process "cindex" (get-buffer-create "*codesearch-index*") codesearch-cindex)))
+  (codesearch--run-cindex))
+
+;;;###autoload
+(defun codesearch-clear-index ()
+  "Clear/delete the codesearch index."
+  (interactive)
+  (codesearch--run-cindex "-reset"))
 
 ;;;###autoload
 (defun codesearch-list-directories ()
