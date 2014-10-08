@@ -2,7 +2,7 @@
 ;;
 ;; Author: Austin Bingham <austin.bingham@gmail.com>
 ;; Version: 1
-;; URL: https://github.com/abingham/codespeak.el
+;; URL: https://github.com/abingham/codesearch.el
 ;; Keywords: tools, development, search
 ;;
 ;; This file is not part of GNU Emacs.
