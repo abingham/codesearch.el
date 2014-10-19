@@ -5,19 +5,49 @@
 This extension allows you to use the *codesearch* code indexing
 system in emacs.
 
-For more details, see the project page at
-https://github.com/abingham/codesearch.el.
+For more details, see the `project page
+<https://github.com/abingham/codesearch.el>`_.
 
-For more details on codesearch, see its project page at
-http://code.google.com/p/codesearch/.
+For more details on codesearch, see its `project page
+<http://code.google.com/p/codesearch/>`_.
 
 Installation
 ============
 
-Copy codesearch.el to some location in your emacs load path. Then add
-``(require 'codesearch)`` to your emacs initialization (.emacs,
-init.el, or something).
+The easy way to install ``codesearch`` is using the emacs package
+system. Just search `*melpa* <http://melpa.milkbox.net/#/>`_ for "codesearch".
+
+Or you can do it manually. Copy codesearch.el to some location in your
+emacs load path. Then add ``(require 'codesearch)`` to your emacs
+initialization (.emacs, init.el, or something).
 
 Example config::
 
   (require 'codesearch)
+
+Quickstart
+==========
+
+You need to add files to the index with ``codesearch-build-index`` (or
+you can do this outside of emacs with ``cindex``, of course.) Then
+search for what you want in your index::
+
+
+    ;; First import the package.
+    (require 'codesearch)
+
+    ;; Index all of the code in your project.
+    (codesearch-build-index "/path/to/project")
+
+    ;; Look for instances of llama jousting in your haskell source
+    ;; files (as one does.) This will display the results as in a new
+    ;; window. You can click the results to go to the matches.
+    (codesearch-search "Llama.*jousting" "*.as")
+
+More commonly, you want to bind ``codesearch-search`` to some useful
+keybinding, like ``M-.``::
+
+    (global-set-key "\M-." 'codesearch-search)
+
+There's more to codesearch, but not much. Just scan the source to see
+what else it can do.
