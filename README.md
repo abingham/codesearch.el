@@ -23,7 +23,7 @@ initialization (.emacs, init.el, or something).
 
 Example config:
 
-```
+```elisp
 (require 'codesearch)
 ```
 
@@ -34,7 +34,7 @@ You need to add files to the index with `codesearch-build-index` (or
 you can do this outside of emacs with `cindex`, of course.) Then
 search for what you want in your index:
 
-```
+```elisp
 ;; First import the package.
 (require 'codesearch)
 
@@ -50,7 +50,7 @@ search for what you want in your index:
 More commonly, you want to bind `codesearch-search` to some useful
 keybinding, like `M-.`:
 
-```
+```elisp
 (global-set-key "\M-." 'codesearch-search)
 ```
 
