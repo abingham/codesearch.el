@@ -92,6 +92,19 @@
   :type '(repeat string)
   :group 'codesearch)
 
+(defface codesearch-filename
+  '((t :inherit success))
+  "Face used to highlight filenames in matches."
+  :group 'codesearch)
+
+(defface codesearch-line-number
+  '((t :inherit font-lock-keyword-face))
+  "Face used to highlight line numbers in matches."
+  :group 'codesearch)
+
+(defconst codesearch--match-regex "^\\(.*\\):\\([0-9]+\\):"
+  "The regular expression used to find matches in the codesearch output.")
+
 (defun codesearch--run-cindex (&rest args)
   "Run the cindex command, passing `codesearch-cindex-flags`
 followed by ARGS as arguments."
@@ -113,6 +126,42 @@ followed by ARGS as arguments."
         (when (= result 0)
           (-slice (split-string (buffer-string) "\n") 0 -1))))))
 
+(define-button-type 'codesearch--filename-match-button
+  'face 'codesearch-filename
+  'follow-link 't
+  'button 't)
+
+(define-button-type 'codesearch--line-number-match-button
+  'face 'codesearch-line-number
+  'follow-link 't
+  'button 't)
+
+(defun codesearch--make-filenames-clickable (buff)
+  "Finds all codesearch matches in BUFF, turning them into
+clickable buttons that link to the matched file/line-number.
+
+BUFF is assumed to contain the output from running csearch.
+"
+  (with-current-buffer buff
+    (beginning-of-buffer)
+    (while (re-search-forward codesearch--match-regex nil t)
+      (lexical-let* ((filename (match-string 1))
+                     (line-number (string-to-int (match-string 2)))
+                     (visit-match (lambda (b)
+                                    (find-file-other-window filename)
+                                    (goto-line line-number))))
+        (make-text-button
+         (match-beginning 1)
+         (match-end 1)
+         'type 'codesearch--filename-match-button
+         'action visit-match)
+
+        (make-text-button
+         (match-beginning 2)
+         (match-end 2)
+         'type 'codesearch--line-number-match-button
+         'action visit-match)))))
+
 ;;;###autoload
 (defun codesearch-search (pattern file-pattern)
   "Search files matching FILE-PATTERN in the index for PATTERN."
@@ -127,9 +176,11 @@ followed by ARGS as arguments."
     (with-current-buffer buff
       (read-only-mode 0)
       (erase-buffer)
-      (start-file-process "csearch" buff codesearch-csearch "-f" file-pattern "-n" pattern))
-    (pop-to-buffer buff)
-    (compilation-mode)))
+      (set-process-sentinel
+       (start-file-process "csearch" buff codesearch-csearch "-f" file-pattern "-n" pattern)
+       (lambda (process event)
+         (codesearch--make-filenames-clickable (process-buffer process)))))
+    (pop-to-buffer buff)))
 
 ;;;###autoload
 (defun codesearch-build-index (dir)
