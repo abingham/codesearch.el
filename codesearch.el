@@ -188,7 +188,7 @@ BUFF is assumed to contain the output from running csearch.
   (interactive
    (list
     (read-directory-name "Directory: ")))
-  (codesearch--run-cindex dir))
+  (codesearch--run-cindex (expand-file-name dir)))
 
 ;;;###autoload
 (defun codesearch-update-index ()
