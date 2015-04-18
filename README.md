@@ -44,7 +44,7 @@ search for what you want in your index:
 ;; Look for instances of llama jousting in your haskell source
 ;; files (as one does.) This will display the results as in a new
 ;; window. You can click the results to go to the matches.
-(codesearch-search "Llama.*jousting" "*.as")
+(codesearch-search "Llama.*jousting" "*.hs")
 ```
 
 More commonly, you want to bind `codesearch-search` to some useful
