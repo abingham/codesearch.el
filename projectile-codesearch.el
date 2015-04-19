@@ -4,7 +4,7 @@
 ;; Version: 1
 ;; URL: https://github.com/abingham/codesearch.el
 ;; Keywords: tools, development, search
-;; Package-Requires: ()
+;; Package-Requires: ((codesearch "20141019.625") (projectile "20150405.126"))
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
