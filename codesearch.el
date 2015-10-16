@@ -186,7 +186,6 @@ BUFF is assumed to contain the output from running csearch.
          (codesearch--make-filenames-clickable (process-buffer process)))))
     (pop-to-buffer buff)))
 
-
 ;;;###autoload
 (defun codesearch-build-index (dir)
   "Add the contents of DIR to the index."
