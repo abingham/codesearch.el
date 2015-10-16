@@ -171,16 +171,21 @@ BUFF is assumed to contain the output from running csearch.
     (read-string "File pattern: " ".*")))
   (let ((process-environment (copy-alist process-environment))
         (switch-to-visible-buffer t)
-        (buff (get-buffer-create "*codesearch-results*")))
+        (buff (get-buffer-create "*codesearch-results*"))
+	(fpattern (if (or (string= system-type "windows-nt")
+			  (string= system-type "ms-dos"))
+		      (replace-regexp-in-string "/" "\\\\\\\\" file-pattern)
+		    file-pattern)))
     (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
     (with-current-buffer buff
       (read-only-mode 0)
       (erase-buffer)
       (set-process-sentinel
-       (start-file-process "csearch" buff codesearch-csearch "-f" file-pattern "-n" pattern)
+       (start-file-process "csearch" buff codesearch-csearch "-f" fpattern "-n" pattern)
        (lambda (process event)
          (codesearch--make-filenames-clickable (process-buffer process)))))
     (pop-to-buffer buff)))
+
 
 ;;;###autoload
 (defun codesearch-build-index (dir)
