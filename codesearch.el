@@ -183,8 +183,7 @@ BUFF is assumed to contain the output from running csearch.
       (set-process-sentinel
        (start-file-process "csearch" buff codesearch-csearch "-f" fpattern "-n" pattern)
        (lambda (process event)
-         (codesearch--make-filenames-clickable (process-buffer process)))
-       ))
+         (codesearch--make-filenames-clickable (process-buffer process)))))
     (pop-to-buffer buff)))
 
 
