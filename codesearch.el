@@ -167,8 +167,10 @@ BUFF is assumed to contain the output from running csearch.
   "Search files matching FILE-PATTERN in the index for PATTERN."
   (interactive
    (list
-    (read-string "Pattern: " (thing-at-point 'symbol))
-    (read-string "File pattern: " ".*")))
+    (read-string "Pattern: " (thing-at-point 'symbol)
+                 'cs-pattern-history (car cs-pattern-history))
+    (read-string "File pattern: " ".*"
+                 'cs-file-pattern-history (car cs-file-pattern-history))))
   (let ((process-environment (copy-alist process-environment))
         (switch-to-visible-buffer t)
         (buff (get-buffer-create "*codesearch-results*")))
