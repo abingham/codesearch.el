@@ -163,6 +163,8 @@ BUFF is assumed to contain the output from running csearch.
          'action visit-match)))))
 
 ;;;###autoload
+(defvar cs-pattern-history nil)
+(defvar cs-file-pattern-history nil)
 (defun codesearch-search (pattern file-pattern)
   "Search files matching FILE-PATTERN in the index for PATTERN."
   (interactive
