@@ -163,16 +163,16 @@ BUFF is assumed to contain the output from running csearch.
          'action visit-match)))))
 
 ;;;###autoload
-(defvar cs-pattern-history nil)
-(defvar cs-file-pattern-history nil)
+(defvar codesearch-pattern-history nil)
+(defvar codesearch-file-pattern-history nil)
 (defun codesearch-search (pattern file-pattern)
   "Search files matching FILE-PATTERN in the index for PATTERN."
   (interactive
    (list
     (read-string "Pattern: " (thing-at-point 'symbol)
-                 'cs-pattern-history (car cs-pattern-history))
+                 'codesearch-pattern-history (car codesearch-pattern-history))
     (read-string "File pattern: " ".*"
-                 'cs-file-pattern-history (car cs-file-pattern-history))))
+                 'codesearch-file-pattern-history (car codesearch-file-pattern-history))))
   (let ((process-environment (copy-alist process-environment))
         (switch-to-visible-buffer t)
         (buff (get-buffer-create "*codesearch-results*")))
