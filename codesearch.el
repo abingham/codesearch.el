@@ -65,6 +65,8 @@
 
 ;;; Code:
 
+(eval-when-compile
+  (require 'cl))
 (require 'dash)
 
 (defgroup codesearch nil
