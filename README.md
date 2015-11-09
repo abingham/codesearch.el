@@ -15,7 +15,7 @@ Installation
 ============
 
 The easy way to install `codesearch` is using the emacs package
-system. Just search [*melpa*](http://melpa.milkbox.net/#/) for "codesearch".
+system. Just search [*melpa*](https://melpa.org/) for "codesearch".
 
 Or you can do it manually. Copy codesearch.el to some location in your
 emacs load path. Then add `(require 'codesearch)` to your emacs
