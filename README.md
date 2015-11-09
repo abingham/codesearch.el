@@ -9,7 +9,7 @@ For more details, see the
 [project page](https://github.com/abingham/codesearch.el).
 
 For more details on codesearch, see its
-[project page](http://code.google.com/p/codesearch/).
+[project page](https://github.com/google/codesearch).
 
 Installation
 ============
