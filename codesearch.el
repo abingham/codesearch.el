@@ -148,7 +148,7 @@ BUFF is assumed to contain the output from running csearch.
     (beginning-of-buffer)
     (while (re-search-forward codesearch--match-regex nil t)
       (lexical-let* ((filename (match-string 1))
-                     (line-number (string-to-int (match-string 2)))
+                     (line-number (string-to-number (match-string 2)))
                      (visit-match (lambda (b)
                                     (find-file-other-window filename)
                                     (goto-line line-number))))
