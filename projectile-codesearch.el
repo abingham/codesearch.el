@@ -8,7 +8,7 @@
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
-;; Copyright (c) 2014 Austin Bingham
+;; Copyright (c) 2014-2016 Austin Bingham
 ;;
 ;;; Commentary:
 ;;
