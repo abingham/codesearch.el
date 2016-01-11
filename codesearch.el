@@ -95,7 +95,7 @@
   :group 'codesearch)
 
 (defface codesearch-filename
-  '((t :inherit success))
+  '((t :inherit font-lock-constant-face))
   "Face used to highlight filenames in matches."
   :group 'codesearch)
 
