@@ -85,7 +85,7 @@
   :group 'codesearch)
 
 (defcustom codesearch-csearchindex "~/.csearchindex"
-  "Path to index file."
+  "CSEARCHINDEX environment variable value used when calling csearch."
   :type '(string)
   :group 'codesearch)
 
@@ -110,10 +110,9 @@
 (defun codesearch--run-cindex (&rest args)
   "Run the cindex command, passing `codesearch-cindex-flags`
 followed by ARGS as arguments."
-  (let* ((process-environment (copy-alist process-environment))
-         (index-file (expand-file-name codesearch-csearchindex))
-         (indexpath-args (list "-indexpath" index-file))
-         (full-args (append indexpath-args codesearch-cindex-flags args)))
+  (let ((process-environment (copy-alist process-environment))
+        (full-args (append codesearch-cindex-flags args)))
+    (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
     (apply 'start-file-process
            "cindex"
            (get-buffer-create "*codesearch-index*")
@@ -123,14 +122,9 @@ followed by ARGS as arguments."
 (defun codesearch-get-indexed-directories ()
   "Get the list of directories currently being indexed."
   (let ((process-environment (copy-alist process-environment)))
+    (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
     (with-temp-buffer
-      (let ((result (process-file codesearch-cindex
-                                  nil
-                                  (current-buffer)
-                                  nil
-                                  "-list"
-                                  "-indexpath"
-                                  (expand-file-name codesearch-csearchindex))))
+      (let ((result (process-file codesearch-cindex nil (current-buffer) nil "-list")))
         (when (= result 0)
           (-slice (split-string (buffer-string) "\n") 0 -1))))))
 
@@ -187,16 +181,12 @@ BUFF is assumed to contain the output from running csearch.
         (file-pattern (if (memq system-type '(windows-nt ms-dos))
                           (replace-regexp-in-string "/" "\\\\\\\\" file-pattern)
                         file-pattern)))
+    (setenv "CSEARCHINDEX" (expand-file-name codesearch-csearchindex))
     (with-current-buffer buff
       (read-only-mode 0)
       (erase-buffer)
       (set-process-sentinel
-       (start-file-process "csearch"
-                           buff
-                           codesearch-csearch
-                           "-indexpath" (expand-file-name codesearch-csearchindex)
-                           "-f" file-pattern
-                           "-n" pattern)
+       (start-file-process "csearch" buff codesearch-csearch "-f" file-pattern "-n" pattern)
        (lambda (process event)
          (codesearch--make-filenames-clickable (process-buffer process)))))
     (pop-to-buffer buff)))
