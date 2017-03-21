@@ -1,6 +1,5 @@
-===============
- codesearch.el
-===============
+
+# codesearch.el
 
 This extension allows you to use the *codesearch* code indexing
 system in emacs.
@@ -11,8 +10,7 @@ For more details, see the
 For more details on codesearch, see its
 [project page](https://github.com/google/codesearch).
 
-Installation
-============
+## Installation
 
 The easy way to install `codesearch` is using the emacs package
 system. Just search [*melpa*](https://melpa.org/) for "codesearch".
@@ -27,8 +25,7 @@ Example config:
 (require 'codesearch)
 ```
 
-Quickstart
-==========
+## Quickstart
 
 You need to add files to the index with `codesearch-build-index` (or
 you can do this outside of emacs with `cindex`, of course.) Then
