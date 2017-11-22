@@ -1,4 +1,10 @@
 
+**IMPORTANT NOTICE: This repository has moved**
+
+The new repository for `codesearch.el` is at [github.com/abingham/emacs-codesearch](https://github.com/abingham/emacs-codesearch). THIS REPOSITORY IS NO LONGER IN USE AND WILL BE REMOVED AT SOME POINT.
+
+*The rest of this README is being kept in place only for historical reasons...*
+
 # codesearch.el
 
 This extension allows you to use the *codesearch* code indexing
